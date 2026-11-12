@@ -5,7 +5,7 @@
 **Integrantes:** Laura Sofía Meza Reinoso · Juan Diego Moreno Revelo
 **Fecha:** 11 de noviembre de 2026
 
-📄 Informe en PDF: [Informe_Taller_Bloque7.pdf](Informe_Taller_Bloque7.pdf) · 🧩 Proyecto Visual Paradigm: [Taller_Bloque7_Editorial.vpp](Taller_Bloque7_Editorial.vpp)
+📄 Informe en PDF: [Informe_Taller_Bloque7.pdf](Informe_Taller_Bloque7.pdf) · 🧩 Proyecto Visual Paradigm: [Taller_Bloque7_Editorial.vpp](Taller_Bloque7_Editorial.vpp) · 💻 Código: [editorial-api](editorial-api)
 
 ---
 
@@ -16,8 +16,9 @@
 3. [Actividad opcional con IA (sección 9)](#3-actividad-opcional-con-ia-sección-9)
 4. [Autoevaluación (sección 10)](#4-autoevaluación-sección-10)
 5. [Contrato mínimo de la API y documentos MongoDB](#5-contrato-mínimo-de-la-api-y-documentos-mongodb)
-6. [Estructura del repositorio](#6-estructura-del-repositorio)
-7. [Referencias](#7-referencias)
+6. [Código: API REST Editorial](#6-código-api-rest-editorial)
+7. [Estructura del repositorio](#7-estructura-del-repositorio)
+8. [Referencias](#8-referencias)
 
 ---
 
@@ -159,7 +160,24 @@ La guía pide que, antes de programar, el equipo justifique el contrato de cada 
 
 ---
 
-## 6. Estructura del repositorio
+## 6. Código: API REST Editorial
+
+La carpeta [`editorial-api`](editorial-api) implementa en **Spring Boot 3 + MongoDB** exactamente lo diseñado en los diagramas:
+
+| Diagrama | Código |
+|---|---|
+| `Publicacion` (abstracta), `Libro`, `Disco` | `model/Publicacion.java`, `model/Libro.java`, `model/Disco.java` (`extends Publicacion`) |
+| Capa de Presentación | `controller/PublicacionController.java`, `LibroController.java`, `DiscoController.java` |
+| Capa de Negocio | `service/PublicacionService.java`, `LibroService.java` (`validarIsbnUnico`), `DiscoService.java` (`validarDuracion`) |
+| Capa de Datos | `repository/PublicacionRepository.java` (`MongoRepository<Publicacion, String>`) |
+| Asociación Controller → Service → Repository | Inyección por constructor (`private final ...Service`, `private final PublicacionRepository`) |
+| Recomendaciones acertadas (sección 9) | `findByTipo(...)` en el repositorio y `exception/ManejadorErrores.java` (`@RestControllerAdvice`) |
+
+Ejecutar: `cd editorial-api && mvn spring-boot:run` (MongoDB local, o variable `MONGODB_URI` para Atlas). Ejemplos de peticiones en `editorial-api/peticiones.http`.
+
+---
+
+## 7. Estructura del repositorio
 
 ```
 .
@@ -167,6 +185,7 @@ La guía pide que, antes de programar, el equipo justifique el contrato de cada 
 ├── Informe_Taller_Bloque7.pdf             ← informe completo en PDF
 ├── GUIA_VISUAL_PARADIGM.md                ← cómo se construyó cada diagrama en Visual Paradigm
 ├── Taller_Bloque7_Editorial.vpp           ← proyecto de Visual Paradigm con los 2 diagramas
+├── editorial-api/                         ← código: API REST Spring Boot + MongoDB
 └── diagramas/                             ← imágenes exportadas desde Visual Paradigm
 ```
 
@@ -179,9 +198,10 @@ Los dos diagramas que pide la guía fueron elaborados en **Visual Paradigm**:
 
 ---
 
-## 7. Referencias
+## 8. Referencias
 
 - Material docente: *Lectura previa Bloque 7 – Web, HTTP, REST, MongoDB y Editorial con herencia y UML por capas*, Diseño de Software.
 - MDN Web Docs – HTTP: https://developer.mozilla.org/es/docs/Web/HTTP
 - Spring Data MongoDB – Reference: https://docs.spring.io/spring-data/mongodb/reference/
+- Spring Boot – Documentación: https://docs.spring.io/spring-boot/
 - MongoDB – Documentación: https://www.mongodb.com/docs/

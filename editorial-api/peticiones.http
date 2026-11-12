@@ -1,0 +1,58 @@
+### Registrar un libro -> 201 Created
+POST http://localhost:8080/api/libros
+Content-Type: application/json
+
+{
+  "titulo": "Diseño de Software",
+  "fechaPublicacion": "2026-03-10",
+  "precio": 65000,
+  "isbn": "978-958-00-0000-1",
+  "numeroPaginas": 280
+}
+
+### Registrar el mismo ISBN otra vez -> 409 Conflict
+POST http://localhost:8080/api/libros
+Content-Type: application/json
+
+{
+  "titulo": "Otro libro",
+  "fechaPublicacion": "2026-04-01",
+  "precio": 50000,
+  "isbn": "978-958-00-0000-1",
+  "numeroPaginas": 120
+}
+
+### Registrar un disco -> 201 Created
+POST http://localhost:8080/api/discos
+Content-Type: application/json
+
+{
+  "titulo": "Sonidos del Galeras",
+  "fechaPublicacion": "2025-11-20",
+  "precio": 42000,
+  "duracionMinutos": 48,
+  "formato": "CD"
+}
+
+### Disco con duración inválida -> 400 Bad Request
+POST http://localhost:8080/api/discos
+Content-Type: application/json
+
+{
+  "titulo": "Disco vacío",
+  "precio": 10000,
+  "duracionMinutos": 0,
+  "formato": "CD"
+}
+
+### Listar todo el catálogo -> 200 OK
+GET http://localhost:8080/api/publicaciones
+
+### Listar solo libros -> 200 OK
+GET http://localhost:8080/api/libros
+
+### Listar solo discos -> 200 OK
+GET http://localhost:8080/api/discos
+
+### Consultar una publicación inexistente -> 404 Not Found
+GET http://localhost:8080/api/publicaciones/no-existe
